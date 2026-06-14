@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
-import { Layout, Typography, Button, Select, Tag, Empty, Space } from 'antd';
+import { Layout, Typography, Button, Select, Tag, Empty, Space, Input } from 'antd';
 import { Link } from 'react-router-dom';
-import { HistoryOutlined, SwapOutlined, BarChartOutlined } from '@ant-design/icons';
+import { HistoryOutlined, SwapOutlined, BarChartOutlined, SearchOutlined } from '@ant-design/icons';
 import { getDifficultyLevels, getAllCategories, filterScores } from '@/services/scoreService';
 import { difficultyLabelMap, difficultyColorMap } from '@/constants/score';
 import type { DifficultyLevel } from '@/types/score';
@@ -16,13 +16,15 @@ export default function ScoreListPage() {
 
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel | undefined>(undefined);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   const filteredScores = useMemo(() => {
     return filterScores(
       selectedDifficulty,
-      selectedCategories.length > 0 ? selectedCategories : undefined
+      selectedCategories.length > 0 ? selectedCategories : undefined,
+      searchKeyword
     );
-  }, [selectedDifficulty, selectedCategories]);
+  }, [selectedDifficulty, selectedCategories, searchKeyword]);
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategories((prev) =>
@@ -35,6 +37,7 @@ export default function ScoreListPage() {
   const resetFilters = () => {
     setSelectedDifficulty(undefined);
     setSelectedCategories([]);
+    setSearchKeyword('');
   };
 
   return (
@@ -61,6 +64,16 @@ export default function ScoreListPage() {
         </Paragraph>
 
         <div style={{ background: '#fff', padding: 16, borderRadius: 8, marginBottom: 16, border: '1px solid #f0f0f0' }}>
+          <div style={{ marginBottom: 12 }}>
+            <Input
+              placeholder="搜索曲名..."
+              prefix={<SearchOutlined style={{ color: '#bfbfbf' }} />}
+              allowClear
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              style={{ maxWidth: 320 }}
+            />
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ whiteSpace: 'nowrap', color: '#666' }}>难度：</span>
@@ -91,7 +104,7 @@ export default function ScoreListPage() {
                 ))}
               </div>
             </div>
-            {(selectedDifficulty || selectedCategories.length > 0) && (
+            {(selectedDifficulty || selectedCategories.length > 0 || searchKeyword) && (
               <Button size="small" onClick={resetFilters}>
                 重置筛选
               </Button>
@@ -147,7 +160,7 @@ export default function ScoreListPage() {
           </div>
         ) : (
           <div style={{ background: '#fff', padding: 48, borderRadius: 8, textAlign: 'center' }}>
-            <Empty description="没有找到匹配的曲目" />
+            <Empty description={searchKeyword ? '未找到相关曲目' : '没有找到匹配的曲目'} />
             <Button type="primary" style={{ marginTop: 16 }} onClick={resetFilters}>
               重置筛选条件
             </Button>

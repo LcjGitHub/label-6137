@@ -37,8 +37,8 @@ export function getAllCategories(): string[] {
   });
 }
 
-/** 按难度和分类筛选曲目 */
-export function filterScores(difficulty?: DifficultyLevel, categories?: string[]): Score[] {
+/** 按难度、分类和关键词筛选曲目 */
+export function filterScores(difficulty?: DifficultyLevel, categories?: string[], keyword?: string): Score[] {
   return scores.filter((score) => {
     if (difficulty && score.difficulty !== difficulty) {
       return false;
@@ -46,6 +46,12 @@ export function filterScores(difficulty?: DifficultyLevel, categories?: string[]
     if (categories && categories.length > 0) {
       const hasCategory = categories.some((cat) => score.categories.includes(cat));
       if (!hasCategory) {
+        return false;
+      }
+    }
+    if (keyword && keyword.trim()) {
+      const trimmedKeyword = keyword.trim().toLowerCase();
+      if (!score.title.toLowerCase().includes(trimmedKeyword)) {
         return false;
       }
     }
