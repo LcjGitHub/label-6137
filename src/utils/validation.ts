@@ -38,3 +38,19 @@ export function checkNoteArrayAnswer(userInput: string, expected: string[]): boo
     (note, i) => note.toUpperCase() === expected[i].toUpperCase(),
   );
 }
+
+/**
+ * 获取简谱提示：返回简谱文本的前三个字符
+ */
+export function getJianpuHint(jianpuText: string): string {
+  const normalized = normalizeJianpu(jianpuText);
+  const chars = normalized.split(' ').filter(Boolean);
+  return chars.slice(0, 3).join(' ');
+}
+
+/**
+ * 获取音高提示：返回音高数组的前三个音高
+ */
+export function getNoteHint(noteArray: string[]): string {
+  return noteArray.slice(0, 3).join(' ');
+}

@@ -13,13 +13,15 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { ArrowLeftOutlined, BarChartOutlined, CheckOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, BarChartOutlined, BulbOutlined, CheckOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { getScoreById } from '@/services/scoreService';
 import { usePracticeStore } from '@/store/practiceStore';
 import { useHistoryStore } from '@/store/historyStore';
 import {
   checkJianpuAnswer,
   checkNoteArrayAnswer,
+  getJianpuHint,
+  getNoteHint,
 } from '@/utils/validation';
 
 const { Header, Content } = Layout;
@@ -51,6 +53,8 @@ export default function PracticePage() {
     setHideMode,
     clearRandomMode,
     reset,
+    markHintUsed,
+    isHintUsed,
   } = usePracticeStore();
   const addRecord = useHistoryStore((s) => s.addRecord);
   const [enteredFromRandom, setEnteredFromRandom] = useState(false);
@@ -58,6 +62,7 @@ export default function PracticePage() {
     type: 'success' | 'error';
     message: string;
   } | null>(null);
+  const [hintContent, setHintContent] = useState<string | null>(null);
 
   const {
     control,
@@ -80,6 +85,7 @@ export default function PracticePage() {
     }
     resetForm({ answer: '' });
     setFeedback(null);
+    setHintContent(null);
   }, [id, isRandomMode, randomHideMode, setHideMode, clearRandomMode, reset, resetForm]);
 
   if (!score) {
@@ -116,10 +122,23 @@ export default function PracticePage() {
     );
   };
 
+  const handleHintClick = () => {
+    if (!id || isHintUsed(id)) return;
+
+    const hint =
+      hideMode === 'jianpu'
+        ? getJianpuHint(score.jianpuText)
+        : getNoteHint(score.noteArray);
+
+    setHintContent(hint);
+    markHintUsed(id);
+  };
+
   const handleModeChange = (mode: 'jianpu' | 'staff') => {
     setHideMode(mode);
     resetForm({ answer: '' });
     setFeedback(null);
+    setHintContent(null);
   };
 
   return (
@@ -216,14 +235,31 @@ export default function PracticePage() {
                   {errors.answer.message}
                 </Text>
               )}
-              <Button
-                type="primary"
-                htmlType="submit"
-                icon={<CheckOutlined />}
-                style={{ marginTop: 16 }}
-              >
-                提交校验
-              </Button>
+              {hintContent && (
+                <Alert
+                  type="info"
+                  showIcon
+                  icon={<BulbOutlined />}
+                  message={`提示：${hintContent}`}
+                  style={{ marginTop: 16 }}
+                />
+              )}
+              <Space style={{ marginTop: 16 }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  icon={<CheckOutlined />}
+                >
+                  提交校验
+                </Button>
+                <Button
+                  icon={<BulbOutlined />}
+                  onClick={handleHintClick}
+                  disabled={id ? isHintUsed(id) : false}
+                >
+                  {id && isHintUsed(id) ? '已使用提示' : '查看提示'}
+                </Button>
+              </Space>
             </form>
           </Card>
 
