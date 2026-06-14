@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
@@ -32,6 +32,12 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+const hideModeLabelMap: Record<'jianpu' | 'staff', string> = {
+  jianpu: '隐藏简谱模式',
+  staff: '隐藏五线谱模式',
+};
+
+/** 练习页：隐藏简谱或五线谱，填写后校验。支持从随机练习入口自动应用隐藏模式 */
 export default function PracticePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -45,7 +51,6 @@ export default function PracticePage() {
     reset,
   } = usePracticeStore();
   const addRecord = useHistoryStore((s) => s.addRecord);
-  const initializedRef = useRef(false);
   const [enteredFromRandom, setEnteredFromRandom] = useState(false);
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error';
@@ -63,14 +68,12 @@ export default function PracticePage() {
   });
 
   useEffect(() => {
-    if (initializedRef.current) return;
-    initializedRef.current = true;
-
     if (isRandomMode && randomHideMode) {
       setEnteredFromRandom(true);
       setHideMode(randomHideMode);
       clearRandomMode();
     } else {
+      setEnteredFromRandom(false);
       reset();
     }
     resetForm({ answer: '' });
@@ -117,11 +120,6 @@ export default function PracticePage() {
     setFeedback(null);
   };
 
-  const hideModeLabelMap: Record<typeof hideMode, string> = {
-    jianpu: '隐藏简谱模式',
-    staff: '隐藏五线谱模式',
-  };
-
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header
@@ -156,14 +154,6 @@ export default function PracticePage() {
                 showIcon
                 icon={<InfoCircleOutlined />}
                 message={`随机练习：已自动应用「${hideModeLabelMap[hideMode]}」`}
-              />
-            )}
-            {!enteredFromRandom && (
-              <Alert
-                type="info"
-                showIcon
-                icon={<InfoCircleOutlined />}
-                message={`当前模式：${hideModeLabelMap[hideMode]}（可手动切换）`}
               />
             )}
             <Radio.Group

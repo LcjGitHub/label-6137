@@ -8,7 +8,6 @@ import {
   Tag,
   Typography,
   Result,
-  Spin,
 } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -21,25 +20,13 @@ import {
 } from '@ant-design/icons';
 import { generateRandomPractice, type RandomPracticeResult } from '@/services/randomService';
 import { usePracticeStore } from '@/store/practiceStore';
-import type { DifficultyLevel, HideMode } from '@/types/score';
+import { difficultyLabelMap, difficultyColorMap } from '@/pages/ScoreListPage';
+import type { HideMode } from '@/types/score';
 
 const { Header, Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
 
-const difficultyLabelMap: Record<DifficultyLevel, string> = {
-  beginner: '入门',
-  easy: '简单',
-  medium: '中等',
-  hard: '困难',
-};
-
-const difficultyColorMap: Record<DifficultyLevel, string> = {
-  beginner: 'green',
-  easy: 'blue',
-  medium: 'orange',
-  hard: 'red',
-};
-
+/** 练习隐藏模式对应的展示信息 */
 const hideModeLabelMap: Record<HideMode, { title: string; desc: string; icon: string }> = {
   jianpu: {
     title: '隐藏简谱',
@@ -53,19 +40,15 @@ const hideModeLabelMap: Record<HideMode, { title: string; desc: string; icon: st
   },
 };
 
+/** 随机练习入口页：随机抽曲并决定练习模式，确认后进入练习流程 */
 export default function RandomPracticePage() {
   const navigate = useNavigate();
   const setRandomMode = usePracticeStore((s) => s.setRandomMode);
   const [result, setResult] = useState<RandomPracticeResult | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const handleGenerate = useCallback(() => {
-    setLoading(true);
-    setTimeout(() => {
-      const randomResult = generateRandomPractice();
-      setResult(randomResult);
-      setLoading(false);
-    }, 400);
+    const randomResult = generateRandomPractice();
+    setResult(randomResult);
   }, []);
 
   const handleStart = useCallback(() => {
@@ -122,7 +105,7 @@ export default function RandomPracticePage() {
           </div>
         </Card>
 
-        {!result && !loading && (
+        {!result && (
           <Result
             icon={<BulbOutlined style={{ color: '#667eea' }} />}
             title="准备好了吗？"
@@ -148,13 +131,7 @@ export default function RandomPracticePage() {
           />
         )}
 
-        {loading && (
-          <Card style={{ textAlign: 'center', padding: 48 }}>
-            <Spin size="large" tip="正在抽取中..." />
-          </Card>
-        )}
-
-        {result && !loading && (
+        {result && (
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
             <Card
               title={

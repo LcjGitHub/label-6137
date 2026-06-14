@@ -4,6 +4,7 @@ import PracticePage from '@/pages/PracticePage';
 import HistoryPage from '@/pages/HistoryPage';
 import RandomPracticePage from '@/pages/RandomPracticePage';
 
+/** 应用路由配置 */
 export default function App() {
   return (
     <BrowserRouter>
