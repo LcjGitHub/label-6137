@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Layout, Typography, Button, Select, Tag, Empty, Space } from 'antd';
 import { Link } from 'react-router-dom';
-import { HistoryOutlined, SwapOutlined } from '@ant-design/icons';
+import { HistoryOutlined, SwapOutlined, BarChartOutlined } from '@ant-design/icons';
 import { getDifficultyLevels, getAllCategories, filterScores } from '@/services/scoreService';
 import type { DifficultyLevel } from '@/types/score';
 
@@ -61,6 +61,9 @@ export default function ScoreListPage() {
         <Space>
           <Link to="/random">
             <Button type="primary" icon={<SwapOutlined />}>随机练习</Button>
+          </Link>
+          <Link to="/statistics">
+            <Button icon={<BarChartOutlined />}>学习统计</Button>
           </Link>
           <Link to="/history">
             <Button icon={<HistoryOutlined />}>练习历史</Button>
