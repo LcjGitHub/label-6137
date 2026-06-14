@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
@@ -49,11 +49,7 @@ export default function PracticePage() {
   const fromDetail = (location.state as { fromDetail?: boolean })?.fromDetail ?? false;
   const {
     hideMode,
-    isRandomMode,
-    randomHideMode,
     setHideMode,
-    clearRandomMode,
-    resetKeepHints,
     markHintUsed,
     isHintUsed,
   } = usePracticeStore();
@@ -76,30 +72,46 @@ export default function PracticePage() {
     defaultValues: { answer: '' },
   });
 
+  const initializedRef = useRef<Record<string, boolean>>({});
+
   useEffect(() => {
-    if (isRandomMode && randomHideMode) {
+    if (!id || initializedRef.current[id]) return;
+    initializedRef.current[id] = true;
+
+    const state = usePracticeStore.getState();
+    if (state.isRandomMode && state.randomHideMode) {
       setEnteredFromRandom(true);
-      setHideMode(randomHideMode);
-      clearRandomMode();
+      state.applyHideMode(state.randomHideMode);
+      state.clearRandomMode();
     } else {
       setEnteredFromRandom(false);
-      resetKeepHints();
+      state.resetKeepHints();
     }
     resetForm({ answer: '' });
     setFeedback(null);
-  }, [id, isRandomMode, randomHideMode, setHideMode, clearRandomMode, resetKeepHints, resetForm]);
-
-  useEffect(() => {
-    if (id && score && isHintUsed(id)) {
+    if (score && state.isHintUsed(id)) {
+      const currentHideMode = usePracticeStore.getState().hideMode;
       const hint =
-        hideMode === 'jianpu'
+        currentHideMode === 'jianpu'
           ? getJianpuHint(score.jianpuText)
           : getNoteHint(score.noteArray);
       setHintContent(hint);
     } else {
       setHintContent(null);
     }
-  }, [id, score, isHintUsed, hideMode]);
+  }, [id, score, resetForm]);
+
+  useEffect(() => {
+    if (!id || !score) return;
+    const store = usePracticeStore.getState();
+    if (store.isHintUsed(id)) {
+      const hint =
+        hideMode === 'jianpu'
+          ? getJianpuHint(score.jianpuText)
+          : getNoteHint(score.noteArray);
+      setHintContent(hint);
+    }
+  }, [id, score, hideMode, isHintUsed]);
 
   if (!score) {
     return (

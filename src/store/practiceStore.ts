@@ -12,8 +12,10 @@ interface PracticeState {
   randomHideMode: HideMode | null;
   /** 记录各题目是否已使用过提示（key: 曲目id） */
   hintUsedMap: Record<string, boolean>;
-  /** 设置当前隐藏模式 */
+  /** 设置当前隐藏模式（用户手动切换，会写入本地存储） */
   setHideMode: (mode: HideMode) => void;
+  /** 应用隐藏模式（仅更新状态，不写入本地存储，用于随机练习等自动应用场景） */
+  applyHideMode: (mode: HideMode) => void;
   /** 标记为随机练习模式并传入随机选中的隐藏模式 */
   setRandomMode: (hideMode: HideMode) => void;
   /** 清除随机练习模式标记 */
@@ -38,10 +40,9 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
     setStoredHideMode(mode);
     set({ hideMode: mode });
   },
-  setRandomMode: (hideMode) => {
-    setStoredHideMode(hideMode);
-    set({ isRandomMode: true, randomHideMode: hideMode, hideMode });
-  },
+  applyHideMode: (mode) => set({ hideMode: mode }),
+  setRandomMode: (hideMode) =>
+    set({ isRandomMode: true, randomHideMode: hideMode, hideMode }),
   clearRandomMode: () =>
     set({ isRandomMode: false, randomHideMode: null }),
   markHintUsed: (scoreId) =>
