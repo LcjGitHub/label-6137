@@ -18,13 +18,23 @@ export function getDifficultyLevels(): DifficultyLevel[] {
   return ['beginner', 'easy', 'medium', 'hard'];
 }
 
+const CATEGORY_ORDER = ['儿歌', '经典', '流行', '民歌', '外国名曲', '影视', '中国风'];
+
 /** 获取所有分类标签列表 */
 export function getAllCategories(): string[] {
   const categorySet = new Set<string>();
   scores.forEach((score) => {
     score.categories.forEach((cat) => categorySet.add(cat));
   });
-  return Array.from(categorySet);
+  const categories = Array.from(categorySet);
+  return categories.sort((a, b) => {
+    const indexA = CATEGORY_ORDER.indexOf(a);
+    const indexB = CATEGORY_ORDER.indexOf(b);
+    if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
 }
 
 /** 按难度和分类筛选曲目 */

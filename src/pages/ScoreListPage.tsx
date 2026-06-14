@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Layout, Typography, Button, Select, Tag, Empty } from 'antd';
 import { Link } from 'react-router-dom';
 import { HistoryOutlined } from '@ant-design/icons';
-import { getAllScores, getDifficultyLevels, getAllCategories } from '@/services/scoreService';
+import { getDifficultyLevels, getAllCategories, filterScores } from '@/services/scoreService';
 import type { DifficultyLevel } from '@/types/score';
 
 const { Header, Content } = Layout;
@@ -24,7 +24,6 @@ const difficultyColorMap: Record<DifficultyLevel, string> = {
 
 /** 曲目列表页 */
 export default function ScoreListPage() {
-  const scores = getAllScores();
   const difficultyLevels = getDifficultyLevels();
   const allCategories = getAllCategories();
 
@@ -32,19 +31,11 @@ export default function ScoreListPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const filteredScores = useMemo(() => {
-    return scores.filter((score) => {
-      if (selectedDifficulty && score.difficulty !== selectedDifficulty) {
-        return false;
-      }
-      if (selectedCategories.length > 0) {
-        const hasCategory = selectedCategories.some((cat) => score.categories.includes(cat));
-        if (!hasCategory) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }, [scores, selectedDifficulty, selectedCategories]);
+    return filterScores(
+      selectedDifficulty,
+      selectedCategories.length > 0 ? selectedCategories : undefined
+    );
+  }, [selectedDifficulty, selectedCategories]);
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategories((prev) =>
@@ -147,7 +138,11 @@ export default function ScoreListPage() {
                 </Paragraph>
                 <div style={{ marginTop: 8, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {score.categories.map((cat) => (
-                    <Tag key={cat} style={{ margin: 0 }}>
+                    <Tag
+                      key={cat}
+                      style={{ margin: 0, cursor: 'default' }}
+                      onClick={(e) => e.preventDefault()}
+                    >
                       {cat}
                     </Tag>
                   ))}
