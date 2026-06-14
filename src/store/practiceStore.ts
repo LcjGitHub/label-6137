@@ -21,7 +21,9 @@ interface PracticeState {
   markHintUsed: (scoreId: string) => void;
   /** 检查指定题目是否已使用提示 */
   isHintUsed: (scoreId: string) => boolean;
-  /** 重置所有状态为默认值 */
+  /** 重置除提示使用记录外的所有状态为默认值 */
+  resetKeepHints: () => void;
+  /** 重置所有状态为默认值（包含清空提示记录） */
   reset: () => void;
 }
 
@@ -41,6 +43,12 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
       hintUsedMap: { ...state.hintUsedMap, [scoreId]: true },
     })),
   isHintUsed: (scoreId) => get().hintUsedMap[scoreId] ?? false,
+  resetKeepHints: () =>
+    set({
+      hideMode: 'jianpu',
+      isRandomMode: false,
+      randomHideMode: null,
+    }),
   reset: () =>
     set({
       hideMode: 'jianpu',

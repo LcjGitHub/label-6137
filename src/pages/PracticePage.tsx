@@ -52,7 +52,7 @@ export default function PracticePage() {
     randomHideMode,
     setHideMode,
     clearRandomMode,
-    reset,
+    resetKeepHints,
     markHintUsed,
     isHintUsed,
   } = usePracticeStore();
@@ -81,12 +81,20 @@ export default function PracticePage() {
       clearRandomMode();
     } else {
       setEnteredFromRandom(false);
-      reset();
+      resetKeepHints();
     }
     resetForm({ answer: '' });
     setFeedback(null);
-    setHintContent(null);
-  }, [id, isRandomMode, randomHideMode, setHideMode, clearRandomMode, reset, resetForm]);
+    if (id && score && isHintUsed(id)) {
+      const hint =
+        hideMode === 'jianpu'
+          ? getJianpuHint(score.jianpuText)
+          : getNoteHint(score.noteArray);
+      setHintContent(hint);
+    } else {
+      setHintContent(null);
+    }
+  }, [id, isRandomMode, randomHideMode, setHideMode, clearRandomMode, resetKeepHints, resetForm, isHintUsed, hideMode, score]);
 
   if (!score) {
     return (
@@ -138,7 +146,13 @@ export default function PracticePage() {
     setHideMode(mode);
     resetForm({ answer: '' });
     setFeedback(null);
-    setHintContent(null);
+    if (id && isHintUsed(id) && score) {
+      const hint =
+        mode === 'jianpu'
+          ? getJianpuHint(score.jianpuText)
+          : getNoteHint(score.noteArray);
+      setHintContent(hint);
+    }
   };
 
   return (
