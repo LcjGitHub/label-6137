@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Layout, Typography, Button, Select, Tag, Empty, Space, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import { HistoryOutlined, SwapOutlined, BarChartOutlined, SearchOutlined } from '@ant-design/icons';
-import { getDifficultyLevels, getAllCategories, filterScores } from '@/services/scoreService';
+import { getDifficultyLevels, getAllCategories, filterScores, searchScoresByTitle } from '@/services/scoreService';
 import { difficultyLabelMap, difficultyColorMap } from '@/constants/score';
 import type { DifficultyLevel } from '@/types/score';
 
@@ -16,14 +16,16 @@ export default function ScoreListPage() {
 
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel | undefined>(undefined);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  /** 当前搜索关键词，用于按曲名实时模糊匹配 */
   const [searchKeyword, setSearchKeyword] = useState('');
 
+  /** 综合难度、分类筛选与曲名搜索后的曲目列表 */
   const filteredScores = useMemo(() => {
-    return filterScores(
+    const filtered = filterScores(
       selectedDifficulty,
-      selectedCategories.length > 0 ? selectedCategories : undefined,
-      searchKeyword
+      selectedCategories.length > 0 ? selectedCategories : undefined
     );
+    return searchScoresByTitle(filtered, searchKeyword);
   }, [selectedDifficulty, selectedCategories, searchKeyword]);
 
   const handleCategoryClick = (category: string) => {
@@ -34,6 +36,7 @@ export default function ScoreListPage() {
     );
   };
 
+  /** 重置所有筛选条件（难度、分类、搜索关键词） */
   const resetFilters = () => {
     setSelectedDifficulty(undefined);
     setSelectedCategories([]);
@@ -161,9 +164,6 @@ export default function ScoreListPage() {
         ) : (
           <div style={{ background: '#fff', padding: 48, borderRadius: 8, textAlign: 'center' }}>
             <Empty description={searchKeyword ? '未找到相关曲目' : '没有找到匹配的曲目'} />
-            <Button type="primary" style={{ marginTop: 16 }} onClick={resetFilters}>
-              重置筛选条件
-            </Button>
           </div>
         )}
       </Content>
