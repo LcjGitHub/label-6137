@@ -2,9 +2,9 @@ import { create } from 'zustand';
 import type { PracticeRecord } from '@/types/score';
 import {
   loadHistory,
+  loadHistoryByRange,
   appendRecord,
   clearHistory as clearStorage,
-  filterByDateRange,
   type DateRange,
 } from '@/services/historyService';
 
@@ -19,7 +19,7 @@ interface HistoryState {
   dateRange: DateRange;
   /** 按当前时间范围筛选后的记录 */
   filteredRecords: PracticeRecord[];
-  /** 设置当前时间范围并刷新筛选结果 */
+  /** 设置当前时间范围并从 localStorage 重新加载对应记录 */
   setDateRange: (range: DateRange) => void;
   /** 新增一条练习记录并持久化 */
   addRecord: (record: PracticeRecord) => void;
@@ -29,13 +29,6 @@ interface HistoryState {
   refresh: () => void;
 }
 
-function getFilteredRecords(
-  allRecords: PracticeRecord[],
-  range: DateRange
-): PracticeRecord[] {
-  return filterByDateRange(allRecords, range);
-}
-
 /** 练习历史状态管理 Store */
 export const useHistoryStore = create<HistoryState>((set, get) => {
   const initialRecords = loadHistory();
@@ -43,12 +36,15 @@ export const useHistoryStore = create<HistoryState>((set, get) => {
     records: initialRecords,
     allRecords: initialRecords,
     dateRange: 'all',
-    filteredRecords: getFilteredRecords(initialRecords, 'all'),
+    filteredRecords: loadHistoryByRange('all'),
     setDateRange: (range) => {
-      const { allRecords } = get();
+      const allRecords = loadHistory();
+      const filteredRecords = loadHistoryByRange(range);
       set({
         dateRange: range,
-        filteredRecords: getFilteredRecords(allRecords, range),
+        records: allRecords,
+        allRecords,
+        filteredRecords,
       });
     },
     addRecord: (record) => {
@@ -58,7 +54,7 @@ export const useHistoryStore = create<HistoryState>((set, get) => {
       set({
         records: allRecords,
         allRecords,
-        filteredRecords: getFilteredRecords(allRecords, dateRange),
+        filteredRecords: loadHistoryByRange(dateRange),
       });
     },
     clearAll: () => {
@@ -75,7 +71,7 @@ export const useHistoryStore = create<HistoryState>((set, get) => {
       set({
         records: allRecords,
         allRecords,
-        filteredRecords: getFilteredRecords(allRecords, dateRange),
+        filteredRecords: loadHistoryByRange(dateRange),
       });
     },
   };

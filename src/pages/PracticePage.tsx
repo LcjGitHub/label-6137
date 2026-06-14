@@ -17,6 +17,7 @@ import { ArrowLeftOutlined, BarChartOutlined, BulbOutlined, CheckOutlined, Histo
 import { getScoreById } from '@/services/scoreService';
 import { usePracticeStore } from '@/store/practiceStore';
 import { useHistoryStore } from '@/store/historyStore';
+import { formatNow } from '@/services/historyService';
 import {
   checkJianpuAnswer,
   checkNoteArrayAnswer,
@@ -137,7 +138,7 @@ export default function PracticePage() {
       scoreTitle: score.title,
       hideMode,
       correct: result.correct,
-      submittedAt: new Date().toLocaleString(),
+      submittedAt: formatNow(),
     });
 
     if (result.correct) {
