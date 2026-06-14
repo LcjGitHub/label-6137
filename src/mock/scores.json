@@ -4,83 +4,107 @@
     "title": "小星星",
     "jianpuText": "1 1 5 5 6 6 5 - 4 4 3 3 2 2 1 -",
     "staffSvgPath": "/staff/score-1.svg",
-    "noteArray": ["C4", "C4", "G4", "G4", "A4", "A4", "G4", "F4", "F4", "E4", "E4", "D4", "D4", "C4"]
+    "noteArray": ["C4", "C4", "G4", "G4", "A4", "A4", "G4", "F4", "F4", "E4", "E4", "D4", "D4", "C4"],
+    "difficulty": "beginner",
+    "categories": ["儿歌", "经典"]
   },
   {
     "id": "2",
     "title": "欢乐颂",
     "jianpuText": "3 3 4 5 | 5 4 3 2 | 1 1 2 3 | 3 2 2 -",
     "staffSvgPath": "/staff/score-2.svg",
-    "noteArray": ["E4", "E4", "F4", "G4", "G4", "F4", "E4", "D4", "C4", "C4", "D4", "E4", "E4", "D4", "D4"]
+    "noteArray": ["E4", "E4", "F4", "G4", "G4", "F4", "E4", "D4", "C4", "C4", "D4", "E4", "E4", "D4", "D4"],
+    "difficulty": "beginner",
+    "categories": ["经典", "外国名曲"]
   },
   {
     "id": "3",
     "title": "两只老虎",
     "jianpuText": "1 2 3 1 | 1 2 3 1 | 3 4 5 - | 3 4 5 -",
     "staffSvgPath": "/staff/score-3.svg",
-    "noteArray": ["C4", "D4", "E4", "C4", "C4", "D4", "E4", "C4", "E4", "F4", "G4", "E4", "F4", "G4"]
+    "noteArray": ["C4", "D4", "E4", "C4", "C4", "D4", "E4", "C4", "E4", "F4", "G4", "E4", "F4", "G4"],
+    "difficulty": "beginner",
+    "categories": ["儿歌"]
   },
   {
     "id": "4",
     "title": "玛丽有只小羊羔",
     "jianpuText": "3 2 1 2 | 3 3 3 - | 2 2 2 - | 3 5 5 -",
     "staffSvgPath": "/staff/score-4.svg",
-    "noteArray": ["E4", "D4", "C4", "D4", "E4", "E4", "E4", "D4", "D4", "D4", "E4", "G4", "G4"]
+    "noteArray": ["E4", "D4", "C4", "D4", "E4", "E4", "E4", "D4", "D4", "D4", "E4", "G4", "G4"],
+    "difficulty": "easy",
+    "categories": ["儿歌", "外国名曲"]
   },
   {
     "id": "5",
     "title": "生日快乐",
     "jianpuText": "5 5 6 5 | 1' 7 - - | 5 5 6 5 | 2' 1' - -",
     "staffSvgPath": "/staff/score-5.svg",
-    "noteArray": ["G4", "G4", "A4", "G4", "C5", "B4", "G4", "G4", "A4", "G4", "D5", "C5"]
+    "noteArray": ["G4", "G4", "A4", "G4", "C5", "B4", "G4", "G4", "A4", "G4", "D5", "C5"],
+    "difficulty": "easy",
+    "categories": ["经典"]
   },
   {
     "id": "6",
     "title": "茉莉花",
     "jianpuText": "3 3 2 1 | 2 1 6 - | 3 3 2 1 | 2 3 2 1 -",
     "staffSvgPath": "/staff/score-6.svg",
-    "noteArray": ["E4", "E4", "D4", "C4", "D4", "C4", "A3", "E4", "E4", "D4", "C4", "D4", "E4", "D4", "C4"]
+    "noteArray": ["E4", "E4", "D4", "C4", "D4", "C4", "A3", "E4", "E4", "D4", "C4", "D4", "E4", "D4", "C4"],
+    "difficulty": "medium",
+    "categories": ["民歌", "经典"]
   },
   {
     "id": "7",
     "title": "送别",
     "jianpuText": "5 3 5 6 | 5 - 3 2 | 1 2 3 5 | 2 - - -",
     "staffSvgPath": "/staff/score-7.svg",
-    "noteArray": ["G4", "E4", "G4", "A4", "G4", "E4", "D4", "C4", "D4", "E4", "G4", "D4"]
+    "noteArray": ["G4", "E4", "G4", "A4", "G4", "E4", "D4", "C4", "D4", "E4", "G4", "D4"],
+    "difficulty": "medium",
+    "categories": ["经典"]
   },
   {
     "id": "8",
     "title": "月亮代表我的心",
     "jianpuText": "5 - 3 2 | 1 - 6 - | 5 - 3 2 | 1 - 2 3 -",
     "staffSvgPath": "/staff/score-8.svg",
-    "noteArray": ["G4", "E4", "D4", "C4", "A3", "G4", "E4", "D4", "C4", "D4", "E4"]
+    "noteArray": ["G4", "E4", "D4", "C4", "A3", "G4", "E4", "D4", "C4", "D4", "E4"],
+    "difficulty": "medium",
+    "categories": ["流行", "经典"]
   },
   {
     "id": "9",
     "title": "青花瓷（片段）",
     "jianpuText": "6 1' 2' 1' | 6 5 3 2 | 3 5 6 - | 1' 6 5 -",
     "staffSvgPath": "/staff/score-9.svg",
-    "noteArray": ["A4", "C5", "D5", "C5", "A4", "G4", "E4", "D4", "E4", "G4", "A4", "C5", "A4", "G4"]
+    "noteArray": ["A4", "C5", "D5", "C5", "A4", "G4", "E4", "D4", "E4", "G4", "A4", "C5", "A4", "G4"],
+    "difficulty": "hard",
+    "categories": ["流行", "中国风"]
   },
   {
     "id": "10",
     "title": "敢问路在何方（片段）",
     "jianpuText": "3 5 6 1' | 2' 1' 6 5 | 3 2 3 5 | 6 - - -",
     "staffSvgPath": "/staff/score-10.svg",
-    "noteArray": ["E4", "G4", "A4", "C5", "D5", "C5", "A4", "G4", "E4", "D4", "E4", "G4", "A4"]
+    "noteArray": ["E4", "G4", "A4", "C5", "D5", "C5", "A4", "G4", "E4", "D4", "E4", "G4", "A4"],
+    "difficulty": "hard",
+    "categories": ["影视", "经典"]
   },
   {
     "id": "11",
     "title": "画心（片段）",
     "jianpuText": "1' 7 6 5 | 3 5 6 - | 1' 7 6 5 | 3 2 1 -",
     "staffSvgPath": "/staff/score-11.svg",
-    "noteArray": ["C5", "B4", "A4", "G4", "E4", "G4", "A4", "C5", "B4", "A4", "G4", "E4", "D4", "C4"]
+    "noteArray": ["C5", "B4", "A4", "G4", "E4", "G4", "A4", "C5", "B4", "A4", "G4", "E4", "D4", "C4"],
+    "difficulty": "hard",
+    "categories": ["影视", "流行"]
   },
   {
     "id": "12",
     "title": "雪绒花",
     "jianpuText": "3 4 5 6 | 5 4 3 4 | 5 5 6 5 | 4 3 2 1 -",
     "staffSvgPath": "/staff/score-12.svg",
-    "noteArray": ["E4", "F4", "G4", "A4", "G4", "F4", "E4", "F4", "G4", "G4", "A4", "G4", "F4", "E4", "D4", "C4"]
+    "noteArray": ["E4", "F4", "G4", "A4", "G4", "F4", "E4", "F4", "G4", "G4", "A4", "G4", "F4", "E4", "D4", "C4"],
+    "difficulty": "easy",
+    "categories": ["外国名曲", "经典"]
   }
 ]

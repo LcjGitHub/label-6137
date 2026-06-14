@@ -1,3 +1,6 @@
+/** 难度等级 */
+export type DifficultyLevel = 'beginner' | 'easy' | 'medium' | 'hard';
+
 /** 曲目数据类型 */
 export interface Score {
   id: string;
@@ -5,6 +8,8 @@ export interface Score {
   jianpuText: string;
   staffSvgPath: string;
   noteArray: string[];
+  difficulty: DifficultyLevel;
+  categories: string[];
 }
 
 /** 练习隐藏模式 */
