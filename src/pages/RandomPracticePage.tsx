@@ -20,7 +20,7 @@ import {
 } from '@ant-design/icons';
 import { generateRandomPractice, type RandomPracticeResult } from '@/services/randomService';
 import { usePracticeStore } from '@/store/practiceStore';
-import { difficultyLabelMap, difficultyColorMap } from '@/pages/ScoreListPage';
+import { difficultyLabelMap, difficultyColorMap } from '@/constants/score';
 import type { HideMode } from '@/types/score';
 
 const { Header, Content } = Layout;

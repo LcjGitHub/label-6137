@@ -3,26 +3,11 @@ import { Layout, Typography, Button, Select, Tag, Empty, Space } from 'antd';
 import { Link } from 'react-router-dom';
 import { HistoryOutlined, SwapOutlined, BarChartOutlined } from '@ant-design/icons';
 import { getDifficultyLevels, getAllCategories, filterScores } from '@/services/scoreService';
+import { difficultyLabelMap, difficultyColorMap } from '@/constants/score';
 import type { DifficultyLevel } from '@/types/score';
 
 const { Header, Content } = Layout;
 const { Title, Paragraph } = Typography;
-
-/** 难度等级对应的中文标签 */
-export const difficultyLabelMap: Record<DifficultyLevel, string> = {
-  beginner: '入门',
-  easy: '简单',
-  medium: '中等',
-  hard: '困难',
-};
-
-/** 难度等级对应的标签颜色 */
-export const difficultyColorMap: Record<DifficultyLevel, string> = {
-  beginner: 'green',
-  easy: 'blue',
-  medium: 'orange',
-  hard: 'red',
-};
 
 /** 曲目列表页 */
 export default function ScoreListPage() {
@@ -72,7 +57,7 @@ export default function ScoreListPage() {
       </Header>
       <Content className="page-container">
         <Paragraph type="secondary">
-          选择一首曲目进入练习，可隐藏简谱或五线谱后填写答案进行对照学习。
+          选择一首曲目进入详情预览，确认曲目信息后可开始练习，练习时可隐藏简谱或五线谱后填写答案进行对照学习。
         </Paragraph>
 
         <div style={{ background: '#fff', padding: 16, borderRadius: 8, marginBottom: 16, border: '1px solid #f0f0f0' }}>

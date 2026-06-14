@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Layout, Typography, Button, Card, Tag, Space, Alert } from 'antd';
 import { ArrowLeftOutlined, PlayCircleOutlined, BarChartOutlined, HistoryOutlined } from '@ant-design/icons';
 import { getScoreById } from '@/services/scoreService';
-import { difficultyLabelMap, difficultyColorMap } from '@/pages/ScoreListPage';
+import { difficultyLabelMap, difficultyColorMap } from '@/constants/score';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -12,6 +13,15 @@ export default function ScoreDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const score = id ? getScoreById(id) : undefined;
+
+  useEffect(() => {
+    if (score) {
+      document.title = `${score.title} - 曲目详情`;
+    }
+    return () => {
+      document.title = '简谱与五线谱对照练习';
+    };
+  }, [score]);
 
   if (!score) {
     return (
@@ -102,7 +112,7 @@ export default function ScoreDetailPage() {
             type="primary"
             size="large"
             icon={<PlayCircleOutlined />}
-            onClick={() => navigate(`/practice/${score.id}`)}
+            onClick={() => navigate(`/practice/${score.id}`, { state: { fromDetail: true } })}
             style={{ width: '100%', height: 48, fontSize: 16 }}
           >
             开始练习

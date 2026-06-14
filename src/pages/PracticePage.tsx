@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -41,7 +41,9 @@ const hideModeLabelMap: Record<'jianpu' | 'staff', string> = {
 export default function PracticePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const score = id ? getScoreById(id) : undefined;
+  const fromDetail = (location.state as { fromDetail?: boolean })?.fromDetail ?? false;
   const {
     hideMode,
     isRandomMode,
@@ -85,8 +87,8 @@ export default function PracticePage() {
       <Layout style={{ minHeight: '100vh' }}>
         <Content className="page-container">
           <Alert type="error" message="未找到该曲目" showIcon />
-          <Button type="link" onClick={() => navigate('/')} style={{ marginTop: 16 }}>
-            返回曲目列表
+          <Button type="link" onClick={() => navigate(fromDetail && id ? `/score/${id}` : '/')} style={{ marginTop: 16 }}>
+            返回
           </Button>
         </Content>
       </Layout>
@@ -134,7 +136,7 @@ export default function PracticePage() {
         <Button
           type="text"
           icon={<ArrowLeftOutlined />}
-          onClick={() => navigate('/')}
+          onClick={() => navigate(fromDetail && id ? `/score/${id}` : '/')}
         >
           返回
         </Button>
