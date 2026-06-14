@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 564 100" width="564" height="100">
+  <text x="40" y="18" font-size="12" fill="#666">小星星</text>
+  <line x1="40" y1="30" x2="544" y2="30" stroke="#333" stroke-width="1.5"/>
+  <line x1="40" y1="40" x2="544" y2="40" stroke="#333" stroke-width="1.5"/>
+  <line x1="40" y1="50" x2="544" y2="50" stroke="#333" stroke-width="1.5"/>
+  <line x1="40" y1="60" x2="544" y2="60" stroke="#333" stroke-width="1.5"/>
+  <line x1="40" y1="70" x2="544" y2="70" stroke="#333" stroke-width="1.5"/>
+  <text x="48" y="58" font-size="28" fill="none" stroke="#333" stroke-width="1.5">𝄞</text>
+  <ellipse cx="80" cy="72" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="112" cy="72" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="144" cy="52" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="176" cy="52" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="208" cy="47" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="240" cy="47" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="272" cy="52" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="304" cy="57" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="336" cy="57" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="368" cy="62" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="400" cy="62" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="432" cy="67" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="464" cy="67" rx="7" ry="5" fill="#333"/>
+  <ellipse cx="496" cy="72" rx="7" ry="5" fill="#333"/>
+</svg>
