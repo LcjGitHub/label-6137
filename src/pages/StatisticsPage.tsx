@@ -24,6 +24,15 @@ import { calculateStatistics } from '@/utils/statistics';
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 
+/**
+ * 学习统计看板页面。
+ *
+ * 功能：
+ * - 从练习历史 store 中读取记录并计算统计数据
+ * - 顶部展示总练习次数、答对次数、整体正确率三张彩色指标卡片
+ * - 下方展示按练习次数排序的曲目练习排行列表
+ * - 无练习记录时展示引导文案与「去练习」跳转按钮
+ */
 export default function StatisticsPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,6 +46,7 @@ export default function StatisticsPage() {
 
   const hasRecords = records.length > 0;
 
+  /** 顶部指标卡片配置，包含 aria-label 以支持辅助技术读取 */
   const statCards = [
     {
       title: '总练习次数',
@@ -120,6 +130,8 @@ export default function StatisticsPage() {
               {statCards.map((card, index) => (
                 <Col xs={24} sm={8} key={index}>
                   <Card
+                    role="region"
+                    aria-label={`${card.title}：${card.value}`}
                     style={{
                       background: card.color,
                       borderColor: card.borderColor,
@@ -137,15 +149,20 @@ export default function StatisticsPage() {
                       <div>
                         <Text
                           type="secondary"
+                          aria-hidden="true"
                           style={{ display: 'block', marginBottom: 8 }}
                         >
                           {card.title}
                         </Text>
-                        <Title level={2} style={{ margin: 0 }}>
+                        <Title
+                          level={2}
+                          aria-label={`${card.title}为${card.value}`}
+                          style={{ margin: 0 }}
+                        >
                           {card.value}
                         </Title>
                       </div>
-                      {card.icon}
+                      <span aria-hidden="true">{card.icon}</span>
                     </div>
                   </Card>
                 </Col>
@@ -184,6 +201,7 @@ export default function StatisticsPage() {
                     <List.Item.Meta
                       avatar={
                         <div
+                          aria-label={`第${index + 1}名`}
                           style={{
                             width: 32,
                             height: 32,

@@ -13,7 +13,7 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { ArrowLeftOutlined, CheckOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, BarChartOutlined, CheckOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { getScoreById } from '@/services/scoreService';
 import { usePracticeStore } from '@/store/practiceStore';
 import { useHistoryStore } from '@/store/historyStore';
@@ -141,6 +141,9 @@ export default function PracticePage() {
         <Title level={4} style={{ margin: 0, flex: 1 }}>
           {score.title}
         </Title>
+        <Link to="/statistics">
+          <Button type="text" icon={<BarChartOutlined />}>学习统计</Button>
+        </Link>
         <Link to="/history">
           <Button type="text" icon={<HistoryOutlined />}>练习历史</Button>
         </Link>
