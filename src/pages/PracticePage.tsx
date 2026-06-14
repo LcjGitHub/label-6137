@@ -16,6 +16,7 @@ import {
 import { ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
 import { getScoreById } from '@/services/scoreService';
 import { usePracticeStore } from '@/store/practiceStore';
+import { useHistoryStore } from '@/store/historyStore';
 import {
   checkJianpuAnswer,
   checkNoteArrayAnswer,
@@ -37,6 +38,7 @@ export default function PracticePage() {
   const navigate = useNavigate();
   const score = id ? getScoreById(id) : undefined;
   const { hideMode, setHideMode, reset } = usePracticeStore();
+  const addRecord = useHistoryStore((s) => s.addRecord);
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error';
     message: string;
@@ -76,6 +78,14 @@ export default function PracticePage() {
       hideMode === 'jianpu'
         ? checkJianpuAnswer(values.answer, score.jianpuText)
         : checkNoteArrayAnswer(values.answer, score.noteArray);
+
+    addRecord({
+      id: crypto.randomUUID(),
+      scoreTitle: score.title,
+      hideMode,
+      correct: isCorrect,
+      submittedAt: new Date().toLocaleString(),
+    });
 
     setFeedback(
       isCorrect

@@ -1,5 +1,6 @@
-import { Layout, Typography } from 'antd';
+import { Layout, Typography, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { HistoryOutlined } from '@ant-design/icons';
 import { getAllScores } from '@/services/scoreService';
 
 const { Header, Content } = Layout;
@@ -11,10 +12,13 @@ export default function ScoreListPage() {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header style={{ background: '#fff', borderBottom: '1px solid #f0f0f0' }}>
+      <Header style={{ background: '#fff', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Title level={3} style={{ margin: '16px 0', color: '#1677ff' }}>
           简谱与五线谱对照练习
         </Title>
+        <Link to="/history">
+          <Button icon={<HistoryOutlined />}>练习历史</Button>
+        </Link>
       </Header>
       <Content className="page-container">
         <Paragraph type="secondary">

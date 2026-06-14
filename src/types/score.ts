@@ -9,3 +9,11 @@ export interface Score {
 
 /** 练习隐藏模式 */
 export type HideMode = 'jianpu' | 'staff';
+
+export interface PracticeRecord {
+  id: string;
+  scoreTitle: string;
+  hideMode: HideMode;
+  correct: boolean;
+  submittedAt: string;
+}
