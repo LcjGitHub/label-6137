@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Layout, Typography, Table, Button, Modal, Empty } from 'antd';
 import { ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -46,9 +47,14 @@ const columns: ColumnsType<PracticeRecord> = [
   },
 ];
 
+/** 练习历史记录页：展示全部练习记录，支持一键清空 */
 export default function HistoryPage() {
   const navigate = useNavigate();
-  const { records, clearAll } = useHistoryStore();
+  const { records, clearAll, refresh } = useHistoryStore();
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const handleClear = () => {
     Modal.confirm({
@@ -84,28 +90,27 @@ export default function HistoryPage() {
         </Title>
       </Header>
       <Content className="page-container">
+        <div style={{ marginBottom: 16, textAlign: 'right' }}>
+          <Button
+            danger
+            icon={<DeleteOutlined />}
+            onClick={handleClear}
+            disabled={records.length === 0}
+          >
+            一键清空
+          </Button>
+        </div>
         {records.length === 0 ? (
           <Empty description="暂无练习记录" />
         ) : (
-          <>
-            <div style={{ marginBottom: 16, textAlign: 'right' }}>
-              <Button
-                danger
-                icon={<DeleteOutlined />}
-                onClick={handleClear}
-              >
-                一键清空
-              </Button>
-            </div>
-            <Table
-              rowKey="id"
-              columns={columns}
-              dataSource={records}
-              pagination={{ pageSize: 10 }}
-              bordered
-              size="middle"
-            />
-          </>
+          <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={records}
+            pagination={{ pageSize: 10 }}
+            bordered
+            size="middle"
+          />
         )}
       </Content>
     </Layout>

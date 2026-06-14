@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -13,7 +13,7 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CheckOutlined, HistoryOutlined } from '@ant-design/icons';
 import { getScoreById } from '@/services/scoreService';
 import { usePracticeStore } from '@/store/practiceStore';
 import { useHistoryStore } from '@/store/historyStore';
@@ -118,9 +118,12 @@ export default function PracticePage() {
         >
           返回
         </Button>
-        <Title level={4} style={{ margin: 0 }}>
+        <Title level={4} style={{ margin: 0, flex: 1 }}>
           {score.title}
         </Title>
+        <Link to="/history">
+          <Button type="text" icon={<HistoryOutlined />}>练习历史</Button>
+        </Link>
       </Header>
       <Content className="page-container">
         <Card title="练习模式" style={{ marginBottom: 16 }}>

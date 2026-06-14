@@ -3,6 +3,7 @@ import ScoreListPage from '@/pages/ScoreListPage';
 import PracticePage from '@/pages/PracticePage';
 import HistoryPage from '@/pages/HistoryPage';
 
+/** 应用路由 */
 export default function App() {
   return (
     <BrowserRouter>
