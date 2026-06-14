@@ -3,13 +3,23 @@ import type { HideMode } from '@/types/score';
 
 interface PracticeState {
   hideMode: HideMode;
+  isRandomMode: boolean;
+  randomHideMode: HideMode | null;
   setHideMode: (mode: HideMode) => void;
+  setRandomMode: (hideMode: HideMode) => void;
+  clearRandomMode: () => void;
   reset: () => void;
 }
 
-/** 练习页全局状态：控制隐藏简谱或五线谱 */
 export const usePracticeStore = create<PracticeState>((set) => ({
   hideMode: 'jianpu',
+  isRandomMode: false,
+  randomHideMode: null,
   setHideMode: (mode) => set({ hideMode: mode }),
-  reset: () => set({ hideMode: 'jianpu' }),
+  setRandomMode: (hideMode) =>
+    set({ isRandomMode: true, randomHideMode: hideMode, hideMode }),
+  clearRandomMode: () =>
+    set({ isRandomMode: false, randomHideMode: null }),
+  reset: () =>
+    set({ hideMode: 'jianpu', isRandomMode: false, randomHideMode: null }),
 }));

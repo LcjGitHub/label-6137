@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
@@ -13,7 +13,7 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { ArrowLeftOutlined, CheckOutlined, HistoryOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CheckOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { getScoreById } from '@/services/scoreService';
 import { usePracticeStore } from '@/store/practiceStore';
 import { useHistoryStore } from '@/store/historyStore';
@@ -32,13 +32,21 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-/** 练习页：隐藏简谱或五线谱，填写后校验 */
 export default function PracticePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const score = id ? getScoreById(id) : undefined;
-  const { hideMode, setHideMode, reset } = usePracticeStore();
+  const {
+    hideMode,
+    isRandomMode,
+    randomHideMode,
+    setHideMode,
+    clearRandomMode,
+    reset,
+  } = usePracticeStore();
   const addRecord = useHistoryStore((s) => s.addRecord);
+  const initializedRef = useRef(false);
+  const [enteredFromRandom, setEnteredFromRandom] = useState(false);
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error';
     message: string;
@@ -55,10 +63,19 @@ export default function PracticePage() {
   });
 
   useEffect(() => {
-    reset();
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
+    if (isRandomMode && randomHideMode) {
+      setEnteredFromRandom(true);
+      setHideMode(randomHideMode);
+      clearRandomMode();
+    } else {
+      reset();
+    }
     resetForm({ answer: '' });
     setFeedback(null);
-  }, [id, reset, resetForm]);
+  }, [id, isRandomMode, randomHideMode, setHideMode, clearRandomMode, reset, resetForm]);
 
   if (!score) {
     return (
@@ -100,6 +117,11 @@ export default function PracticePage() {
     setFeedback(null);
   };
 
+  const hideModeLabelMap: Record<typeof hideMode, string> = {
+    jianpu: '隐藏简谱模式',
+    staff: '隐藏五线谱模式',
+  };
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header
@@ -127,15 +149,33 @@ export default function PracticePage() {
       </Header>
       <Content className="page-container">
         <Card title="练习模式" style={{ marginBottom: 16 }}>
-          <Radio.Group
-            value={hideMode}
-            onChange={(e) => handleModeChange(e.target.value)}
-            optionType="button"
-            buttonStyle="solid"
-          >
-            <Radio.Button value="jianpu">隐藏简谱（看五线谱填简谱）</Radio.Button>
-            <Radio.Button value="staff">隐藏五线谱（看简谱填音高）</Radio.Button>
-          </Radio.Group>
+          <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+            {enteredFromRandom && (
+              <Alert
+                type="success"
+                showIcon
+                icon={<InfoCircleOutlined />}
+                message={`随机练习：已自动应用「${hideModeLabelMap[hideMode]}」`}
+              />
+            )}
+            {!enteredFromRandom && (
+              <Alert
+                type="info"
+                showIcon
+                icon={<InfoCircleOutlined />}
+                message={`当前模式：${hideModeLabelMap[hideMode]}（可手动切换）`}
+              />
+            )}
+            <Radio.Group
+              value={hideMode}
+              onChange={(e) => handleModeChange(e.target.value)}
+              optionType="button"
+              buttonStyle="solid"
+            >
+              <Radio.Button value="jianpu">隐藏简谱（看五线谱填简谱）</Radio.Button>
+              <Radio.Button value="staff">隐藏五线谱（看简谱填音高）</Radio.Button>
+            </Radio.Group>
+          </Space>
         </Card>
 
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
