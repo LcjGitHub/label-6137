@@ -22,6 +22,7 @@ import {
   checkNoteArrayAnswer,
   getJianpuHint,
   getNoteHint,
+  type ValidationResult,
 } from '@/utils/validation';
 
 const { Header, Content } = Layout;
@@ -61,6 +62,7 @@ export default function PracticePage() {
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error';
     message: string;
+    description?: string;
   } | null>(null);
   const [hintContent, setHintContent] = useState<string | null>(null);
 
@@ -110,7 +112,7 @@ export default function PracticePage() {
   }
 
   const onSubmit = (values: FormValues) => {
-    const isCorrect =
+    const result: ValidationResult =
       hideMode === 'jianpu'
         ? checkJianpuAnswer(values.answer, score.jianpuText)
         : checkNoteArrayAnswer(values.answer, score.noteArray);
@@ -119,15 +121,34 @@ export default function PracticePage() {
       id: crypto.randomUUID(),
       scoreTitle: score.title,
       hideMode,
-      correct: isCorrect,
+      correct: result.correct,
       submittedAt: new Date().toLocaleString(),
     });
 
-    setFeedback(
-      isCorrect
-        ? { type: 'success', message: '回答正确！' }
-        : { type: 'error', message: '回答错误，请再试一次。' },
-    );
+    if (result.correct) {
+      setFeedback({ type: 'success', message: '回答正确！' });
+    } else {
+      const position = result.mismatchIndex + 1;
+      const unitLabel = hideMode === 'jianpu' ? '个音符' : '个音高';
+      let description = '';
+
+      if (!result.lengthMatch) {
+        description = `共 ${result.expectedCount}${unitLabel}，你输入了 ${result.userCount}${unitLabel}`;
+        if (result.userCount < result.expectedCount) {
+          description += `，第 ${position}${unitLabel}起不匹配`;
+        } else {
+          description += `，第 ${position}${unitLabel}超出预期`;
+        }
+      } else {
+        description = `第 ${position}${unitLabel}不正确`;
+      }
+
+      setFeedback({
+        type: 'error',
+        message: '回答错误，请再试一次。',
+        description,
+      });
+    }
   };
 
   const handleHintClick = () => {
@@ -281,6 +302,7 @@ export default function PracticePage() {
             <Alert
               type={feedback.type}
               message={feedback.message}
+              description={feedback.description}
               showIcon
             />
           )}
