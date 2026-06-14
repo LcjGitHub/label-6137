@@ -123,7 +123,7 @@ export default function ScoreListPage() {
             {filteredScores.map((score) => (
               <Link
                 key={score.id}
-                to={`/practice/${score.id}`}
+                to={`/score/${score.id}`}
                 style={{
                   display: 'block',
                   padding: '16px 20px',
