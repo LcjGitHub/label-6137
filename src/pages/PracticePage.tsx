@@ -87,6 +87,9 @@ export default function PracticePage() {
     }
     resetForm({ answer: '' });
     setFeedback(null);
+  }, [id, isRandomMode, randomHideMode, setHideMode, clearRandomMode, resetKeepHints, resetForm]);
+
+  useEffect(() => {
     if (id && score && isHintUsed(id)) {
       const hint =
         hideMode === 'jianpu'
@@ -96,7 +99,7 @@ export default function PracticePage() {
     } else {
       setHintContent(null);
     }
-  }, [id, isRandomMode, randomHideMode, setHideMode, clearRandomMode, resetKeepHints, resetForm, isHintUsed, hideMode, score]);
+  }, [id, score, isHintUsed, hideMode]);
 
   if (!score) {
     return (
@@ -129,16 +132,16 @@ export default function PracticePage() {
       setFeedback({ type: 'success', message: '回答正确！' });
     } else {
       const position = result.mismatchIndex + 1;
-      const unitLabel = hideMode === 'jianpu' ? '个音符' : '个音高';
+      const isJianpuMode = hideMode === 'jianpu';
+      const unitLabel = isJianpuMode ? '个音符' : '个音高';
       let description = '';
 
-      if (!result.lengthMatch) {
+      if (result.hasContentMismatch) {
+        description = `第 ${position}${unitLabel}不正确`;
+      } else if (isJianpuMode && result.jianpuSegmentIndex !== -1) {
+        description = `简谱第 ${result.jianpuSegmentIndex + 1} 段不匹配`;
+      } else if (!result.lengthMatch) {
         description = `共 ${result.expectedCount}${unitLabel}，你输入了 ${result.userCount}${unitLabel}`;
-        if (result.userCount < result.expectedCount) {
-          description += `，第 ${position}${unitLabel}起不匹配`;
-        } else {
-          description += `，第 ${position}${unitLabel}超出预期`;
-        }
       } else {
         description = `第 ${position}${unitLabel}不正确`;
       }

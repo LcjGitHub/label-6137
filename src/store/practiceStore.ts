@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { HideMode } from '@/types/score';
+import { getStoredHideMode, setStoredHideMode } from '@/utils/storage';
 
 /** 练习页全局状态接口 */
 interface PracticeState {
@@ -29,13 +30,18 @@ interface PracticeState {
 
 /** 练习页全局状态：控制隐藏简谱或五线谱，支持随机练习模式标记 */
 export const usePracticeStore = create<PracticeState>((set, get) => ({
-  hideMode: 'jianpu',
+  hideMode: getStoredHideMode(),
   isRandomMode: false,
   randomHideMode: null,
   hintUsedMap: {},
-  setHideMode: (mode) => set({ hideMode: mode }),
-  setRandomMode: (hideMode) =>
-    set({ isRandomMode: true, randomHideMode: hideMode, hideMode }),
+  setHideMode: (mode) => {
+    setStoredHideMode(mode);
+    set({ hideMode: mode });
+  },
+  setRandomMode: (hideMode) => {
+    setStoredHideMode(hideMode);
+    set({ isRandomMode: true, randomHideMode: hideMode, hideMode });
+  },
   clearRandomMode: () =>
     set({ isRandomMode: false, randomHideMode: null }),
   markHintUsed: (scoreId) =>
@@ -45,13 +51,11 @@ export const usePracticeStore = create<PracticeState>((set, get) => ({
   isHintUsed: (scoreId) => get().hintUsedMap[scoreId] ?? false,
   resetKeepHints: () =>
     set({
-      hideMode: 'jianpu',
       isRandomMode: false,
       randomHideMode: null,
     }),
   reset: () =>
     set({
-      hideMode: 'jianpu',
       isRandomMode: false,
       randomHideMode: null,
       hintUsedMap: {},
